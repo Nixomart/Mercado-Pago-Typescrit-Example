@@ -1,8 +1,8 @@
-import indexRoute from "./routes/index";
+import indexRoute from "./src/routes/index";
 import express from "express";
 import mercadopago from "mercadopago";
 import bodyParser from "body-parser";
-import { ACCES_TOKEN, PORT } from "./config";
+import { ACCES_TOKEN, PORT } from "./src/config";
 const app = express();
 
 mercadopago.configure({

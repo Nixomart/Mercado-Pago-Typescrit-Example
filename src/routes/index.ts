@@ -3,6 +3,7 @@ import { Request, Response, Router } from "express";
 import mercadopago from "mercadopago";
 import { ACCES_TOKEN } from "../config";
 import SubscriptionController from "../controllers/SubscriptionController";
+import { createUserController } from "../controllers/UserController";
 import SubscriptionService from "../services/SubscriptionService";
 
 const router = Router();
@@ -26,7 +27,6 @@ router.get("/generarSub",async (req: Request, res: Response) => {
       transaction_amount: 10,
       currency_id: "ARS",
     },
-    notification_url: "https://6a5b-170-84-124-24.sa.ngrok.io/notificarr",
     back_url: "https://google.com.ar",
     payer_email: "test_user_1295243383@testuser.com",
   };
@@ -54,7 +54,7 @@ router.get("/generar", (req: Request, res: Response) => {
         quantity: 1,
       },
     ],
-    notification_url: "https://admin.piedrasuma.com",
+    notification_url: "https://9edd-170-84-124-24.sa.ngrok.io/notificar",
   };
 
   mercadopago.preferences
@@ -73,24 +73,27 @@ router.use("/success", (req: Request, res: Response) => {
   res.send("TODOBIEN1");
 });
 
-router.use("/notificarr", (req: Request, res: Response) => {
+router.post("/notificarr", (req: Request, res: Response) => {
   res.send("TODOBIEN1");
   console.log('req.query', req.query)
 });
+
+router.post('/createUser', createUserController)
 
 router.use("/notificar", async (req: Request, res: Response) => {
   console.log("######################notificarr####################################");
   const {query} = req
   const topic = query.topic || query.type;
-  console.log("#############topic################", topic);
+  console.log("#############topic################", /* topic */);
 
   switch (topic) {  
     case "payment":
       const paymentId = query.id || query["data.id"];
-      console.log(topic, "getting payment", paymentId);
+      /* console.log(topic, "getting payment", paymentId); */
       
       const payment = await mercadopago.payment.findById(+paymentId!);
-      console.log(payment);
+      /* console.log(payment);
+ */
       var {body} = await mercadopago.merchant_orders.findById(
         payment.body.order.id
       );

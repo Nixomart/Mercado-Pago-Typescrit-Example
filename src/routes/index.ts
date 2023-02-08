@@ -2,45 +2,11 @@ import axios from "axios";
 import { Request, Response, Router } from "express";
 import mercadopago from "mercadopago";
 import { ACCES_TOKEN } from "../config";
-import SubscriptionController from "../controllers/SubscriptionController";
-import { createUserController } from "../controllers/UserController";
-import SubscriptionService from "../services/SubscriptionService";
+import { createUserController } from "../controllers/user.controller";
 
 const router = Router();
 
 //create to try subscription
-
-const SubscriptionInstance = new SubscriptionController(
-  new SubscriptionService()
-);
-
-router.get("/generarSub",async (req: Request, res: Response) => {
-  /* SubscriptionInstance.getSubscriptionLinkB(req, res); */
-
-  const url = "https://api.mercadopago.com/preapproval";
-
-  const body = {
-    reason: "Suscripción Basica",
-    auto_recurring: {
-      frequency: 1,
-      frequency_type: "months",
-      transaction_amount: 10,
-      currency_id: "ARS",
-    },
-    back_url: "https://google.com.ar",
-    payer_email: "test_user_1295243383@testuser.com",
-  };
-
-  const subscription = await axios.post(url, body, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${ACCES_TOKEN}`,
-    },
-  });
-  
-  res.send(`<a href=${subscription.data.init_point} >PAGAR SUBS</a>`)
-
-});
 
 router.get("/generar", (req: Request, res: Response) => {
   let preference = {
